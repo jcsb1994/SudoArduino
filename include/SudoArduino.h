@@ -21,6 +21,10 @@
 #include <Arduino.h>
 #define MAX_ULONG_VALUE (4294967295) 
 
+namespace SudoArduino {
+
 bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod);
+
+}
 
 #endif

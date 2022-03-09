@@ -8,8 +8,7 @@
 #define PRINT_SUDO_ARDUINO(msg) 
 #endif
 
-
-bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod) {
+bool SudoArduino::isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod) {
     unsigned long gap;
     PRINT_SUDO_ARDUINO("Start time: " + String(startTime));
     if (millis() < startTime) {   // in case of overflow
