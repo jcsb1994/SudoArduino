@@ -1,0 +1,25 @@
+{
+    "name": "SudoArduino",
+    "version": "1.0.0",
+    "description": "This library offers advanced functions with Arduino",
+    "keywords": "Arduino, functions, timeout",
+    "repository":
+    {
+      "type": "git"
+    },
+    "authors":
+    [
+      {
+        "name": "Jean-Christophe Sicotte-Brisson",
+        "email": "jeanchristophesicottebrisson@gmail.com",
+        "url": "https://github.com/jcsb1994",
+        "maintainer": true
+      }
+    ],
+    "license": "Apache",
+    "dependencies": {
+      "ownername/print": "~1.3.0"
+    },
+    "frameworks": "arduino",
+    "platforms": "uno, espressif32"
+  }
