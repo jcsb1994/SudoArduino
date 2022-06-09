@@ -23,6 +23,12 @@
 
 namespace SudoArduino {
 
+/***************************************************************************/
+/*!
+    @brief Checks if a start timestamp is older than a timeout period. Immune to millis() overflow.
+    @return true if older than timeout period.
+*/
+/***************************************************************************/
 bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod);
 
 }

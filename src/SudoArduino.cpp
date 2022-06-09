@@ -15,7 +15,7 @@ bool SudoArduino::isTimeOut(unsigned long &startTime, unsigned long TimeOutPerio
       PRINT_SUDO_ARDUINO("Millis Overflow");
       gap = (MAX_ULONG_VALUE - startTime) + millis() + 1;
     } else {
-      PRINT_SUDO_ARDUINO("Calculating time between now and timer start");
+      PRINT_SUDO_ARDUINO("Calculating time between now and timer start: " + String(millis()) + " " + String(startTime));
       gap = millis() - startTime;
     }  
     if (gap >= TimeOutPeriod) {
@@ -23,6 +23,6 @@ bool SudoArduino::isTimeOut(unsigned long &startTime, unsigned long TimeOutPerio
       return true;
     } else {
       PRINT_SUDO_ARDUINO("Not reached");
-      return 0;
+      return false;
     }
 }
