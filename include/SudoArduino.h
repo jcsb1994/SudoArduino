@@ -23,13 +23,14 @@
 
 namespace SudoArduino {
 
-/***************************************************************************/
-/*!
-    @brief Checks if a start timestamp is older than a timeout period. Immune to millis() overflow.
-    @return true if older than timeout period.
-*/
-/***************************************************************************/
+/*! @brief Checks if a start timestamp is older than a timeout period. Immune to millis() overflow
+    @return true if older than timeout period  */
 bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod);
+
+
+/*! @brief  Non blocking function to connect to wifi on ESP32 since WiFiSTAClass::waitForConnectResult() is blocking
+    @return 0 while trying to connect, -1 if failed, 1 if success   */
+int8_t connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs); 
 
 }
 
