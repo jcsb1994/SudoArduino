@@ -23,15 +23,35 @@
 
 namespace SudoArduino {
 
+
+template <typename T> 
+struct Timer 
+{ 
+  unsigned long startTime;
+  T timeoutPeriod;
+  bool isTimeOut();
+}; 
+
+// TODO: find a way to define for any type
+bool SudoArduino::Timer<int>::isTimeOut() {
+    SudoArduino::isTimeOut(startTime, timeoutPeriod);
+}
+
 /*! @brief Checks if a start timestamp is older than a timeout period. Immune to millis() overflow
     @return true if older than timeout period  */
 bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod);
 
 
+}
+
+
+#ifdef ESP32
+namespace SudoESP32
+{
 /*! @brief  Non blocking function to connect to wifi on ESP32 since WiFiSTAClass::waitForConnectResult() is blocking
     @return 0 while trying to connect, -1 if failed, 1 if success   */
-int8_t connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs); 
-
+    int8_t connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs); 
 }
+#endif
 
 #endif

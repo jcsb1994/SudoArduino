@@ -1,36 +1,47 @@
 #include "SudoArduino.h"
 
 
-#define DEBUG_SUDO_ARDUINO 1
-#if DEBUG_SUDO_ARDUINO
-#define PRINT_SUDO_ARDUINO(msg) Serial.println(msg)
+#if DEBUG_SUDOARDUINO
+#define PRINT(msg) Serial.println(msg)
 #else
-#define PRINT_SUDO_ARDUINO(msg) 
+#define PRINT(msg) 
 #endif
+
+
+#if DEBUG_SUDOARDUINO==2
+#define PRINT_VERBOSE(msg) Serial.println(msg)
+#else
+#define PRINT_VERBOSE(msg) 
+#endif
+
+// bool SudoArduino::Timer<int>::isTimeOut() {
+
+// }
 
 bool SudoArduino::isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod) {
     unsigned long gap;
-    PRINT_SUDO_ARDUINO("Start time: " + String(startTime));
+    PRINT_VERBOSE("Start time: " + String(startTime));
     if (millis() < startTime) {   // in case of overflow
-      PRINT_SUDO_ARDUINO("Millis Overflow");
+      PRINT("Millis Overflow");
       gap = (MAX_ULONG_VALUE - startTime) + millis() + 1;
     } else {
-      PRINT_SUDO_ARDUINO("Calculating time between now and timer start: " + String(millis()) + " " + String(startTime));
+      PRINT_VERBOSE("Calculating time between now and timer start: " + String(millis()) + " " + String(startTime));
       gap = millis() - startTime;
     }  
     if (gap >= TimeOutPeriod) {
-      PRINT_SUDO_ARDUINO(String(gap) + " is bigger than timeout period " + String(TimeOutPeriod));
+      PRINT_VERBOSE(String(gap) + " is bigger than timeout period " + String(TimeOutPeriod));
       return true;
     } else {
-      PRINT_SUDO_ARDUINO("Not reached");
+      PRINT_VERBOSE("Not reached");
       return false;
     }
 }
 
+#ifdef ESP32
 
 #include <WiFi.h>
 
-int8_t SudoArduino::connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs) { // non blocking since WiFiSTAClass::waitForConnectResult() is blocking
+int8_t SudoESP32::connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs) { // non blocking since WiFiSTAClass::waitForConnectResult() is blocking
     static unsigned long timeout;
     static bool connectionInitiated = false;
     if (!connectionInitiated) 
@@ -39,21 +50,23 @@ int8_t SudoArduino::connectWifi(const char* ssid, const char* pw, uint16_t TimeO
         timeout = millis();
         WiFi.mode(WIFI_STA);
         WiFi.begin(ssid, pw);
-        PRINT_SUDO_ARDUINO("Connecting to WiFi ..");
+        PRINT("Connecting to WiFi ..");
     }
     if (WiFi.status() == WL_CONNECTED)
     {
-        PRINT_SUDO_ARDUINO("Conn to wifi success");
-        PRINT_SUDO_ARDUINO(WiFi.localIP());
+        PRINT("Conn to wifi success");
+        PRINT(WiFi.localIP());
         connectionInitiated = false;
         return 1;
     }
-    else if (isTimeOut(timeout, TimeOutPeriodMs))
+    else if (SudoArduino::isTimeOut(timeout, TimeOutPeriodMs))
     {
-        PRINT_SUDO_ARDUINO("Failed conn to wifi");
+        PRINT("Failed conn to wifi");
         connectionInitiated = false;
         return -1;
     }
     return 0;
     
 }
+
+#endif
