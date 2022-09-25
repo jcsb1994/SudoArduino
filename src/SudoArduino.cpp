@@ -7,16 +7,12 @@
 #define PRINT(msg) 
 #endif
 
-
 #if DEBUG_SUDOARDUINO==2
 #define PRINT_VERBOSE(msg) Serial.println(msg)
 #else
 #define PRINT_VERBOSE(msg) 
 #endif
 
-// bool SudoArduino::Timer<int>::isTimeOut() {
-
-// }
 
 bool SudoArduino::isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod) {
     unsigned long gap;
@@ -40,6 +36,7 @@ bool SudoArduino::isTimeOut(unsigned long &startTime, unsigned long TimeOutPerio
 #ifdef ESP32
 
 #include <WiFi.h>
+#include <time.h>
 
 int8_t SudoESP32::connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs) { // non blocking since WiFiSTAClass::waitForConnectResult() is blocking
     static unsigned long timeout;
@@ -66,7 +63,20 @@ int8_t SudoESP32::connectWifi(const char* ssid, const char* pw, uint16_t TimeOut
         return -1;
     }
     return 0;
-    
 }
+
+uint32_t SudoESP32::getUnixTime()
+{
+    time_t now;
+    struct tm timeinfo;
+    if (!getLocalTime(&timeinfo))
+    {
+        PRINT("Failed to obtain time from ESP32");
+        return 0;
+    }
+    time(&now);
+    return now;
+}
+
 
 #endif

@@ -19,39 +19,37 @@
 #define SUDO_ARDUINO_H
 
 #include <Arduino.h>
-#define MAX_ULONG_VALUE (4294967295) 
+#define MAX_ULONG_VALUE (4294967295)
 
-namespace SudoArduino {
+namespace SudoArduino
+{
+  template <typename T>
+  struct Timer
+  {
+    unsigned long startTime;
+    T timeoutPeriod;
+    //   bool isTimeOut() {
+    //     SudoArduino::isTimeOut(startTime, (unsigned long)timeoutPeriod);
+    //   }
+  };
 
-
-template <typename T> 
-struct Timer 
-{ 
-  unsigned long startTime;
-  T timeoutPeriod;
-  bool isTimeOut();
-}; 
-
-// TODO: find a way to define for any type
-bool SudoArduino::Timer<int>::isTimeOut() {
-    SudoArduino::isTimeOut(startTime, timeoutPeriod);
+  /*! @brief Checks if a start timestamp is older than a timeout period. Immune to millis() overflow
+      @return true if older than timeout period  */
+  bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod);
 }
-
-/*! @brief Checks if a start timestamp is older than a timeout period. Immune to millis() overflow
-    @return true if older than timeout period  */
-bool isTimeOut(unsigned long &startTime, unsigned long TimeOutPeriod);
-
-
-}
-
 
 #ifdef ESP32
 namespace SudoESP32
 {
-/*! @brief  Non blocking function to connect to wifi on ESP32 since WiFiSTAClass::waitForConnectResult() is blocking
-    @return 0 while trying to connect, -1 if failed, 1 if success   */
-    int8_t connectWifi(const char* ssid, const char* pw, uint16_t TimeOutPeriodMs); 
+  /*! @brief  Non blocking function to connect to wifi on ESP32 since WiFiSTAClass::waitForConnectResult() is blocking
+      @return 0 while trying to connect, -1 if failed, 1 if success   */
+  int8_t connectWifi(const char *ssid, const char *pw, uint16_t TimeOutPeriodMs);
+
+  /*! @brief Get time from the chip's registers in Unix
+      @note Must use configTime() from espressif's <time.h> */
+  uint32_t getUnixTime();
+
 }
 #endif
 
-#endif
+#endif // SUDO_ARDUINO_H
